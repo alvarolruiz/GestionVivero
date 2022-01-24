@@ -1,0 +1,9 @@
+Hecho:
+Entidades, Menu login
+
+Por hacer:
+Menu:
+showLogin:
+en el main el resultado de show login será un array de 2 posiciones (usuario, contraseña). Dichas posiciones se cargarán en un
+objeto/vendedor, en funcion del tipo de permiso que tenga
+GestorBDD, Posee un objeto gestor o es el propio gestor??
