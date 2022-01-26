@@ -33,7 +33,7 @@ public abstract class Producto {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(double precioUnitario) {
+    public void setPrecioUnitario(float precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 
@@ -44,4 +44,6 @@ public abstract class Producto {
     public void setUnidadesDisponibles(int unidadesDisponibles) {
         this.unidadesDisponibles = unidadesDisponibles;
     }
+
+
 }

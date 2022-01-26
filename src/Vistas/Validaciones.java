@@ -12,8 +12,9 @@ public class Validaciones {
         Boolean correcto = false;
         for (int i = 0; i < opcionesMenu.length; i++) {
             if(opcion.equals(opcionesMenu[i])){
-
+            correcto=true;
             }
         }
+        return correcto;
     }
 }
