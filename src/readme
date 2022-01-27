@@ -11,6 +11,8 @@ GestorBDD, Posee un objeto gestor o es el propio gestor??
 
 Entidades:
 
+La clase cliente no debe saber nada sobre el descuento. De eso se encargr
+
 clsGeneradorDeInformes
 
 
@@ -56,6 +58,8 @@ Por otro lado tambien tendrá una tabla lineasFacturas, con IDFactura, NombrePro
 
 Preguntar. BDD requiere del id del producto para las lineas de factura. Como consigo que cada producto independientemente del tipo
 tenga un id secuencial
+
+Habría que hacer una lista de productos que se almacene en un xml
 
 
 

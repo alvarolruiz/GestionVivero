@@ -6,4 +6,8 @@ public class Cliente extends Persona{
     public Cliente(String nombre, String dni, String direccion, int codPostal, String ciudad, int telefono) {
         super(nombre, dni, direccion, codPostal, ciudad, telefono);
     }
+
+    public Cliente(double descuentoCliente) {
+        this.descuentoCliente = descuentoCliente;
+    }
 }
