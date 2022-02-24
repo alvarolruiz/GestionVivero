@@ -1,5 +1,6 @@
 package Controlador;
 
+import DataAccessLayer.gestoraLogIn.GestoraUsuarios;
 import Entidades.Documentos.Factura;
 import Entidades.Documentos.FilaFactura;
 import Entidades.Productos.Producto;
@@ -9,6 +10,7 @@ import Vistas.Constantes;
 import Vistas.Menu;
 import Vistas.Validaciones;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -16,6 +18,8 @@ public class GestoraMenu {
     private static Scanner tecla = new Scanner(System.in);
 
     private Vendedor vendedorLogeado;
+
+
 
     public GestoraMenu(Vendedor vendedorLogeado) {
         this.vendedorLogeado = vendedorLogeado;
@@ -74,25 +78,25 @@ public class GestoraMenu {
     }
 
 
-    private Cliente preguntarDatosCliente() {
+    private Cliente preguntarDatosCliente() throws SQLException {
         String dniOTelefono;
         Cliente clienteComprador = null;
         System.out.println(Menu.MSG_PEDIR_DATOS_CLIENTE);
         String respuesta = tecla.nextLine();
-        if (respuesta.equals("D")) {
+        if (respuesta.equalsIgnoreCase("D")) {
             System.out.println(Menu.MSG_PEDIR_DNI_CLIENTE);
             dniOTelefono = tecla.nextLine();
             clienteComprador = getCliente(true, dniOTelefono);
-            if (clienteComprador == null) {
-                clienteComprador = Constantes.CLIENTE_NO_REGISTRADO;
+            if (clienteComprador.get) {
+                clienteComprador = getCliente(true,dniOTelefono);
                 System.out.println(Menu.MSG_CLIENTE_NO_REGISTRADO);
             }
-        } else if (respuesta.equals("T")) {
+        } else if (respuesta.equalsIgnoreCase("T")) {
             System.out.println(Menu.MSG_PEDIR_TELEFONO_CLIENTE);
             dniOTelefono = tecla.nextLine();
             getCliente(false, dniOTelefono);
-            if (clienteComprador == null)
-                clienteComprador = Constantes.CLIENTE_NO_REGISTRADO;
+            if (clienteComprador.getTelefono() == null)
+                clienteComprador = getCliente(false, dniOTelefono);
             System.out.println(Menu.MSG_CLIENTE_NO_REGISTRADO);
         }
         return clienteComprador;
@@ -100,11 +104,12 @@ public class GestoraMenu {
 
 
 
-    private Cliente getCliente(boolean dni, String dniOTelefono) {
+    private Cliente getCliente(boolean dni, String dniOTelefono) throws SQLException {
         Cliente clienteComprador = null;
         if (dni) {
+           clienteComprador =  GestoraUsuarios.getClienteDni(dniOTelefono);
         } else {
-
+            clienteComprador = GestoraUsuarios.getClienteTelefono(Integer.parseInt(dniOTelefono));
         }
     }
 }

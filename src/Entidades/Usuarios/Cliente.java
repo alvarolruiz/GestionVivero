@@ -3,10 +3,12 @@ package Entidades.Usuarios;
 import Vistas.Constantes;
 
 public class Cliente extends Persona{
+    private int idCliente;
     private double descuentoCliente;
 
-    public Cliente(String nombre, String dni, String direccion, int codPostal, String ciudad, int telefono, String correoElectronico) {
+    public Cliente(int idCliente, String nombre, String dni, String direccion, int codPostal, String ciudad, int telefono, String correoElectronico) {
         super(nombre, dni, direccion, codPostal, ciudad, telefono, correoElectronico);
+        this.idCliente = idCliente;
         setDescuentoCliente();
     }
 

@@ -4,7 +4,11 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class Menu {
-    public static final String MSG_ERROR_LOGIN = "El usuario y/o contraseña introducidos son incorrectos";
+    public static final String MSG_ERROR_LOGIN_CONTRASENA = "La contraseña que ha introducido es incorrecta";
+    public static final String MSG_ERROR_LOGIN_GESTOR = "El gestor no existe";
+    public static final String MSG_ERROR_LOGIN_VENDEDOR = "El vendedor no existe";
+
+    public static final String MSG_ERROR_LOGIN_USUARIO = "El usuario que ha introducido no existe";
     public static final String SEPARATOR = "_____________________";
     public static final String MENU_INICIO_VENDEDOR = "Menú Inicio"+
                                                        SEPARATOR +
@@ -15,7 +19,7 @@ public class Menu {
 
     public static final String MSG_INICIAR_VENTA = "Ha iniciado una venta";
     public static final String MSG_PEDIR_DATOS_CLIENTE = "¿Desea introducir el dni o el teléfono del cliente?."+ "\n" +
-                                                         "Introduzca D o T";
+                                                         "Introduzca D o T:";
     public static final String MSG_PEDIR_DNI_CLIENTE = "Introduce el dni del cliente:";
     public static final String MSG_PEDIR_TELEFONO_CLIENTE = "Introduce el telefono del cliente:";
     public static final String MSG_CLIENTE_NO_REGISTRADO = "Cliente no registrado. No podrá disfrutar de los descuentos" +
@@ -41,15 +45,22 @@ public class Menu {
     public static String[] showLogin(){
         String usuario = null;
         String contraseña = null;
+        char tipoUsuario;
+        System.out.println("Iniciar Sesión" +  "\n"
+                +  "---------------");
         do{
-            System.out.println("Iniciar Sesion" +  "\n"
-                            +  "---------------" +  "\n"
-                            +  "Usuario: "
-            );
+            System.out.println("Usuario: ");
             usuario = tecla.nextLine();
+            tipoUsuario=Validaciones.tipoAdministrador(usuario);
+            if(tipoUsuario=='N'){
+                System.out.println(MSG_ERROR_LOGIN_USUARIO);
+            }
+        }while (tipoUsuario=='N');
+
+        do{
             System.out.println("Contraseña: ");
             contraseña = tecla.nextLine();
-        }while (Validaciones.validarCredenciales("admin",usuario,contraseña));
+        }while (Validaciones.validarCredenciales(usuario, contraseña, tipoUsuario));
         System.out.println("Login correcto. Bienvenido " + usuario);
         return arrayDatosLogin(usuario, contraseña);
     }
