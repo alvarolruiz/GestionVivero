@@ -4,62 +4,60 @@ Entidades, Menu login
 Vista:
 
 Menu:
-showLogin:
-en el main el resultado de show login será un array de 2 posiciones (usuario, contraseña). Dichas posiciones se cargarán en un
-objeto/vendedor, en funcion del tipo de permiso que tenga
+
+Gestoras:
 GestorBDD, Posee un objeto gestor o es el propio gestor??
 
-Entidades:
+Generador Informes:
+Constará de varios métodos que recibirán una fecha de inicio, tipo (anual o mensual)
+y una lista formada de objetos de la clase InformeRow
 
-La clase cliente no debe saber nada sobre el descuento. De eso se encargr
+generarInformeVentas(fecha, tipo ) --> Será generado por una clase informe, la cual podrá disponer de funciones sql para ello. no habrá tabla informe, solo se extraerá la info
+y se imprimiá en pantalla
+El informe constará del mes del qque se genera el informe, el total de ventas totales por cada tipo de producto (uds) y el total global
 
-clsGeneradorDeInformes
 
-
-clsFactura:
-cliente
-vendedor
-fecha
-list<lineaFactura>
-importeTotal
-
-clsLineaFactura
-Producto
-Cantidad
-Precio
-
-total
-
-calcularTotal(){
-total = cantidad*PrecioU
-}
 
 El gestor de BDD constará de los siguientes metodos
 
-//El gestor tendrá un objeto generadorInformes como atributo
-//Todo crear la clase generadorInformes, que constará varios métodos que recibirán una fecha de inicio, tipo (anual o mensual) y una lista formada de objetos de la clase InformeRow
-//Todo FilaInforme contendrá Tipo de producto, Cantidad y total
-generarInformeVentasMensual(fecha) --> Será generado por una clase informe, la cual podrá disponer de funciones sql para ello (Plantear)
-generarInformeVentasAnual (fecha)
-generarInformeVendedores (fecha) --> Tambien sera generado por la cls informe. Debe estar ordenado de mayor a menor
-getProducto(tipoProducto )
-getClientes();
-getVendedores();
-getGestores();
-getFacturasCliente(Cliente);
-
-El vendedor  constará de los siguientes metodos:
 
 
-BDD:
 
-La base de datos constará de una tabla factura con IDFactura, cliente, vendedor, fecha e importe total.
-Por otro lado tambien tendrá una tabla lineasFacturas, con IDFactura, NombreProducto, CantidadVendida y Total.
+generarInformeVentasAnual (fecha)--> Igual que el anterior pero por año
 
-Preguntar. BDD requiere del id del producto para las lineas de factura. Como consigo que cada producto independientemente del tipo
-tenga un id secuencial
+getProductosPlanta() --> Func que devuelve una tabla de productos planta
+getProductosJardnieria()--> Func tvf que devuelve una tabla de productos jardineria
 
-Habría que hacer una lista de productos que se almacene en un xml
+getClientes --> Mostrar lista de clientes
+
+getVendedores--> Mostrar lista de vendedores
+
+getGestores-->Mostrar lista de gestores
+
+getFacturasCliente(idCliente)--> Func que devuelve las facturas d dicho cliente
+
+
+
+
+Tenemos los siguientes usuarios:
+Gestores:
+user: root
+password: toor
+
+user: root2
+password: 2toor
+
+Clientes:
+dni: 99108945J
+telefono: 666778866
+
+dni: 68895536W
+telefono: 666229913
+
+
+
+
+
 
 
 

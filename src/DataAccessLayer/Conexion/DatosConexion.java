@@ -1,5 +1,7 @@
 package DataAccessLayer.Conexion;
 
+import Vistas.Constantes;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,12 +17,11 @@ import java.util.Properties;
  */
 public class DatosConexion {
 
-    private final String MSG_SUCCESSFUL_CONNECTION = "Conexión establecida con éxito";
-    private final String MSG_FAILURE_CONNECTION = "No ha sido posible establecer la conexión";
-    private static final String NOMBRE_FICHERO_PROPIEDADES = "ConexionConfig.properties";
-    private Properties propiedadesConexion = new Properties();
+
+    private Properties propiedadesConexion;
 
     public DatosConexion() {
+        propiedadesConexion= new Properties();
         cargarFicheroConfig();
     }
 
@@ -34,13 +35,17 @@ public class DatosConexion {
        try{
            conn = DriverManager.getConnection(getConnectionString());
            if(conn!=null){
-               System.out.println(MSG_SUCCESSFUL_CONNECTION);
+               System.out.println(Constantes.MSG_SUCCESSFUL_CONNECTION);
            }
        }catch (SQLException e){
-           System.out.println(MSG_FAILURE_CONNECTION);
+           System.out.println(Constantes.MSG_FAILURE_CONNECTION);
        }
        return conn;
 
+   }
+
+   public void closeConnection (Connection c) throws SQLException {
+       c.close();
    }
 
     /**
@@ -49,7 +54,7 @@ public class DatosConexion {
 
     private void cargarFicheroConfig() {
         try {
-            propiedadesConexion.load(new FileInputStream(new File(NOMBRE_FICHERO_PROPIEDADES)));
+            propiedadesConexion.load(new FileInputStream(new File(Constantes.NOMBRE_FICHERO_PROPIEDADES)));
         } catch (IOException e) {
             e.printStackTrace();
         }

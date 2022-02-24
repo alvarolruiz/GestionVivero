@@ -12,19 +12,8 @@ public class Vendedor extends Persona {
         this.password = password;
     }
 
-    protected String getUser() {
+    protected String getUserName() {
         return user;
     }
 
-    protected void setUser(String user) {
-        this.user = user;
-    }
-
-    protected String getPassword() {
-        return password;
-    }
-
-    protected void setPassword(String password) {
-        this.password = password;
-    }
 }

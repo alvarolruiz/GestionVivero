@@ -7,15 +7,37 @@ public abstract class Persona {
     private int codPostal;
     private String ciudad;
     private int telefono;
+    private String correoElectronico;
 
 
-    public Persona(String nombre, String dni, String direccion, int codPostal, String ciudad, int telefono) {
+    public Persona(String nombre, String dni, String direccion, int codPostal, String ciudad, int telefono, String correoElectronico) {
         this.nombre = nombre;
         this.dni = dni;
         this.direccion = direccion;
         this.codPostal = codPostal;
         this.ciudad = ciudad;
         this.telefono = telefono;
+        this.correoElectronico = correoElectronico;
+    }
+
+    public Persona(String dni) {
+        this.nombre = null;
+        this.dni = dni;
+        this.direccion = null;
+        this.codPostal = 0;
+        this.ciudad = null;
+        this.telefono = 0;
+        this.correoElectronico = null;
+    }
+
+    public Persona(int telefono) {
+        this.nombre = null;
+        this.dni = null;
+        this.direccion = null;
+        this.codPostal = 0;
+        this.ciudad = null;
+        this.telefono = telefono;
+        this.correoElectronico = null;
     }
 
     public Persona() {
@@ -72,12 +94,13 @@ public abstract class Persona {
     @Override
     public String toString() {
         return "Persona{" +
-                "nombre ='" + nombre + '\'' +
-                ", dni ='" + dni + '\'' +
-                ", direccion ='" + direccion + '\'' +
-                ", codPostal =" + codPostal +
-                ", ciudad ='" + ciudad + '\'' +
-                ", telefono =" + telefono +
+                "nombre='" + nombre + '\'' +
+                ", dni='" + dni + '\'' +
+                ", direccion='" + direccion + '\'' +
+                ", codPostal=" + codPostal +
+                ", ciudad='" + ciudad + '\'' +
+                ", telefono=" + telefono +
+                ", correoElectronico='" + correoElectronico + '\'' +
                 '}';
     }
 }

@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class gestorListados {
@@ -17,7 +18,8 @@ public class gestorListados {
        conexion = new DatosConexion().getConexion();
     }
 
-    public List<Cliente> getClientes(){
+    public ArrayList<Cliente> getClientes(){
+        ArrayList<Cliente> listaClientes = new ArrayList<>();
         try{
             Statement statement = conexion.createStatement();
             ResultSet result = statement.executeQuery(SELECT_CLIENTES);
@@ -28,6 +30,6 @@ public class gestorListados {
         }catch (SQLException e){
             e.printStackTrace();
         }
-
+    return  listaClientes;
     }
 }

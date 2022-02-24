@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Factura {
+    // En la bdd se almacenara el dni de cliente y vendedor
     private Cliente cliente;
     private Vendedor vendedor;
     private Date fecha;
@@ -31,8 +32,12 @@ public class Factura {
     //Se podría hacer un carrito de la compra en el que se vayan almacenando los productos que se añaden en el menu,
     // y despues pasarselo a la factura, la cual de los datos simplificados extraera la informacion necesaria y completará la lista de
     // articulos
-    public void añadirArticulo(){
-        //Comprobar si la cantidad
+    public void añadirFilaFactura(FilaFactura fila){
+        articulos.add(fila);
+    }
+
+    public void imprimirFactura(){
+
     }
 
 
