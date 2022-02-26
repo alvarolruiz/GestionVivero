@@ -1,24 +1,24 @@
 package Entidades.Productos;
 
 public abstract class Producto {
-    private int codigo;
+    private int id;
     private String descripcion;
     private double precioUnitario;
     private int unidadesDisponibles;
 
-    public Producto(int codigo, String descripcion, double precioUnitario, int unidadesDisponibles) {
-        codigo = codigo;
+    public Producto(int id, String descripcion, double precioUnitario, int unidadesDisponibles) {
+        this.id = id;
         this.descripcion = descripcion;
         this.precioUnitario = precioUnitario;
         this.unidadesDisponibles = unidadesDisponibles;
     }
 
-    public int getCodigo() {
-        return codigo;
+    public int getId() {
+        return id;
     }
 
-    public void setCodigo(int codigo) {
-        codigo = codigo;
+    public void setId(int id) {
+        id = id;
     }
 
     public String getDescripcion() {

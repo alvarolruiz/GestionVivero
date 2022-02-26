@@ -1,6 +1,8 @@
 package Controlador;
 
-import DataAccessLayer.gestoraLogIn.GestoraUsuarios;
+import DataAccessLayer.Gestoras.GestoraFacturas;
+import DataAccessLayer.Listados.ListadosFacturas;
+import DataAccessLayer.Listados.ListadosUsuarios;
 import Entidades.Documentos.Factura;
 import Entidades.Documentos.FilaFactura;
 import Entidades.Productos.Producto;
@@ -8,24 +10,22 @@ import Entidades.Usuarios.Administradores.Vendedor;
 import Entidades.Usuarios.Cliente;
 import Vistas.Constantes;
 import Vistas.Menu;
-import Vistas.Validaciones;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.Scanner;
 
-public class GestoraMenu {
+public class GestoraMenuVendedor {
     private static Scanner tecla = new Scanner(System.in);
 
     private Vendedor vendedorLogeado;
 
 
 
-    public GestoraMenu(Vendedor vendedorLogeado) {
+    public GestoraMenuVendedor(Vendedor vendedorLogeado) {
         this.vendedorLogeado = vendedorLogeado;
     }
 
-    public void showMenu() {
+    public void showMenu() throws SQLException {
         int opcion = 0;
         boolean fin = false;
         do {
@@ -42,30 +42,54 @@ public class GestoraMenu {
 
     }
 
-    private void iniciarVenta() {
+    private void iniciarVenta() throws SQLException {
         System.out.println(Menu.MSG_INICIAR_VENTA);
         Cliente clienteComprador = preguntarDatosCliente();
-        Factura factura = new Factura(clienteComprador,vendedorLogeado);
-        //todo Obtener fecha actual
+        int idFactura = ListadosFacturas.getNextIdFactura();
+        Factura factura = new Factura(idFactura, clienteComprador.getId(),vendedorLogeado.getId());
+        // Clase factura tiene como fecha java.util.date
+        //java.sql.Timestamp fechaSql = new java.sql.Timestamp(new Date().getTime());
         boolean nuevaLinea = false;
         do {
             System.out.println(Menu.MSG_LINEA_FACTURA);
-            factura.añadirFilaFactura(nuevaLineaFactura());
+            factura.añadirFilaFactura(nuevaLineaFactura(idFactura));
             nuevaLinea = Menu.preguntarNuevaLineaFactura();
         }while(nuevaLinea);
-        System.out.println(Menu.MSG_PREG_ACCION_FACTURA);
-
-
-
+        if(Menu.preguntarGuardarFactura()){
+            guardarFactura(factura);
+        }else{
+            factura = null;
+        }
     }
 
-    private FilaFactura nuevaLineaFactura() {
+    private FilaFactura nuevaLineaFactura(int idFactura) {
         Producto producto = null;
         producto = getProducto(Menu.pedirCodigoProducto());
         int cantidadProducto = Menu.pedirCantidadProducto();
-        FilaFactura fila = new FilaFactura(producto,cantidadProducto);
+        FilaFactura fila = new FilaFactura(idFactura,producto,cantidadProducto);
         return fila;
     }
+
+    /**
+     * Este metodo guardara la factura en la base de datos. Guardará los datos de la factura primero y después
+     * irá llamando a otro método guardar lineaFactura por cada una de entrads que tiene la lista de facturas
+     * @param factura
+     */
+    private void guardarFactura(Factura factura) {
+        int filasAfectadasFacturas = 0;
+        int filasAfectadasLineas = 0;
+        try {
+            filasAfectadasFacturas = GestoraFacturas.añadirFactura(factura);
+            filasAfectadasLineas = GestoraFacturas.añadirFilasFactura(factura.getArticulos());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if(filasAfectadasFacturas == 1 && filasAfectadasLineas >=1){
+            System.out.println(Menu.MSG_INSERCCIÓN_CORRECTA);
+        }
+    }
+
+
 
     /**
      * Busca en la base de datos el producto con dicho id y lo devuelve
@@ -87,29 +111,27 @@ public class GestoraMenu {
             System.out.println(Menu.MSG_PEDIR_DNI_CLIENTE);
             dniOTelefono = tecla.nextLine();
             clienteComprador = getCliente(true, dniOTelefono);
-            if (clienteComprador.get) {
-                clienteComprador = getCliente(true,dniOTelefono);
+            if (clienteComprador.getId()== Constantes.ID_CLIENTE_NO_REGISTRADO) {
                 System.out.println(Menu.MSG_CLIENTE_NO_REGISTRADO);
             }
         } else if (respuesta.equalsIgnoreCase("T")) {
             System.out.println(Menu.MSG_PEDIR_TELEFONO_CLIENTE);
             dniOTelefono = tecla.nextLine();
-            getCliente(false, dniOTelefono);
-            if (clienteComprador.getTelefono() == null)
-                clienteComprador = getCliente(false, dniOTelefono);
-            System.out.println(Menu.MSG_CLIENTE_NO_REGISTRADO);
+            clienteComprador = getCliente(false, dniOTelefono);
+            if (clienteComprador.getId() == Constantes.ID_CLIENTE_NO_REGISTRADO) {
+                System.out.println(Menu.MSG_CLIENTE_NO_REGISTRADO);
+            }
         }
         return clienteComprador;
     }
 
-
-
     private Cliente getCliente(boolean dni, String dniOTelefono) throws SQLException {
         Cliente clienteComprador = null;
         if (dni) {
-           clienteComprador =  GestoraUsuarios.getClienteDni(dniOTelefono);
+           clienteComprador =  ListadosUsuarios.getClienteDni(dniOTelefono);
         } else {
-            clienteComprador = GestoraUsuarios.getClienteTelefono(Integer.parseInt(dniOTelefono));
+            clienteComprador = ListadosUsuarios.getClienteTelefono(Integer.parseInt(dniOTelefono));
         }
+        return clienteComprador;
     }
 }

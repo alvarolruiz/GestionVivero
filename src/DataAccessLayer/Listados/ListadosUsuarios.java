@@ -1,7 +1,8 @@
-package DataAccessLayer.gestoraLogIn;
+package DataAccessLayer.Listados;
 
 
 import DataAccessLayer.Conexion.DatosConexion;
+import Entidades.Usuarios.Administradores.Administrador;
 import Entidades.Usuarios.Administradores.GestorBDD;
 import Entidades.Usuarios.Administradores.Vendedor;
 import Entidades.Usuarios.Cliente;
@@ -10,18 +11,18 @@ import Vistas.Menu;
 
 import java.sql.*;
 
-public class GestoraUsuarios {
+public class ListadosUsuarios {
     /*
     Clase terminada. Posee metodos publicos para devolver un cliente, un gestor, y un vendedor. Además tambien contiene
     Métodos que devolverán booleanos que simplemente comrpobarán si existe el usuario en la base de datos. Estos métodos
     Serán llamados desde la clase validaciones
     */
 
-    public static DatosConexion datosConexion = new DatosConexion();
+    private static DatosConexion datosConexion = new DatosConexion();
 
     public static Cliente getClienteDni(String dni) throws SQLException {
         ResultSet result;
-        Cliente cliente = null;
+        Cliente cliente;
         String sql = "SELECT * FROM Clientes Where dni = ?";
         try (Connection c = datosConexion.getConexion()) {
             PreparedStatement statement = c.prepareStatement(sql);
@@ -32,7 +33,7 @@ public class GestoraUsuarios {
             } else {
                 sql = "Select * FROM Clientes WHERE idCliente =?";
                 statement = c.prepareStatement(sql);
-                statement.setString(1, String.valueOf(Constantes.ID_CLIENTE_NO_REGISTRADO);
+                statement.setString(1, String.valueOf(Constantes.ID_CLIENTE_NO_REGISTRADO));
                 result = statement.executeQuery(sql);
                 cliente = getDatosDeCliente(result);
             }
@@ -46,14 +47,14 @@ public class GestoraUsuarios {
         String sql = "SELECT * FROM Clientes Where telefonoContacto = ?";
         try (Connection c = datosConexion.getConexion()) {
             PreparedStatement statement = c.prepareStatement(sql);
-            statement.setString(1, String.valueOf(telefono);
+            statement.setString(1, String.valueOf(telefono));
             result = statement.executeQuery(sql);
             if (result.isBeforeFirst()) {
                 cliente = getDatosDeCliente(result);
             } else {
                 sql = "Select * FROM Clientes WHERE idCliente =?";
                 statement = c.prepareStatement(sql);
-                statement.setString(1, String.valueOf(Constantes.ID_CLIENTE_NO_REGISTRADO);
+                statement.setString(1, String.valueOf(Constantes.ID_CLIENTE_NO_REGISTRADO));
                 result = statement.executeQuery();
                 cliente = getDatosDeCliente(result);
             }
@@ -63,22 +64,81 @@ public class GestoraUsuarios {
         return cliente;
     }
 
+    public static GestorBDD getGestorBDD(String usuario, String constraseña) throws SQLException {
+        GestorBDD gestorBDD = null;
+        ResultSet resultSet;
+        String sql = "SELECT * FROM Gestores Where usuario = ? AND contraseña = ?";
+        try (Connection c = datosConexion.getConexion()) {
+            PreparedStatement statement = c.prepareStatement(sql);
+            statement.setString(1, usuario);
+            statement.setString(2, constraseña);
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.isBeforeFirst()) {
+                gestorBDD = (GestorBDD) getDatosAdmin(resultSet);
+            } else {
+                System.out.println(Menu.MSG_ERROR_LOGIN_GESTOR);
+            }
+        }
+        return gestorBDD;
+    }
+
+    public static Vendedor getVendedor(String usuario, String constraseña) throws SQLException {
+        Vendedor vendedor = null;
+        ResultSet resultSet;
+        String sql = "SELECT * FROM Vendedores Where usuario = ? AND contraseña = ?";
+        try (Connection c = datosConexion.getConexion()) {
+            PreparedStatement statement = c.prepareStatement(sql);
+            statement.setString(1, usuario);
+            statement.setString(2, constraseña);
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.isBeforeFirst()) {
+                vendedor = (Vendedor) getDatosAdmin(resultSet);
+            } else {
+                System.out.println(Menu.MSG_ERROR_LOGIN_GESTOR);
+            }
+        }
+        return vendedor;
+    }
+
+    public static boolean isValidLogin(String usuario, String constraseña, char tipoAdmin) throws SQLException {
+        boolean isValidLogin = false;
+        ResultSet resultSet;
+        String sql = "";
+        if(tipoAdmin == Constantes.ADMIN_VENDEDOR){
+            sql = "SELECT * FROM Vendedores Where usuario = ? AND contraseña = ?";
+        }else if(tipoAdmin == Constantes.ADMIN_GESTOR){
+            sql = "SELECT * FROM Gestores Where usuario = ? AND contraseña = ?";
+        }
+        try (Connection c = datosConexion.getConexion()) {
+            PreparedStatement statement = c.prepareStatement(sql);
+            statement.setString(1, usuario);
+            statement.setString(2, constraseña);
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.isBeforeFirst()) {
+                isValidLogin = true;
+            } else {
+                System.out.println(Menu.MSG_ERROR_LOGIN_GESTOR);
+            }
+        }
+        return isValidLogin;
+    }
+
     public static char tipoAdministrador(String usuario) {
         char tipoUsuario = Constantes.ADMIN_NULO;
-        if (isAdmin(usuario)) {
+        if (isGestor(usuario)) {
             tipoUsuario = Constantes.ADMIN_GESTOR;
-        } else if (isSeller(usuario)) {
+        } else if (isVendedor(usuario)) {
             tipoUsuario = Constantes.ADMIN_VENDEDOR;
         }
         return tipoUsuario;
     }
 
-    private static boolean isAdmin(String usuario) {
+    private static boolean isGestor(String usuario) {
         String sql = "SELECT * FROM Gestores Where usuario = ?";
         return isRegistered(usuario, sql);
     }
 
-    private static boolean isSeller(String usuario) {
+    private static boolean isVendedor(String usuario) {
         String sql = "SELECT * FROM Vendedores Where usuario = ?";
         return isRegistered(usuario, sql);
     }
@@ -98,77 +158,25 @@ public class GestoraUsuarios {
         return exists;
     }
 
-    public static GestorBDD getGestorBDD(String usuario, String constraseña) throws SQLException {
-        GestorBDD gestorBDD = null;
-        ResultSet resultSet;
-        String sql = "SELECT * FROM Gestores Where usuario = ? AND contraseña = ?";
-        try (Connection c = datosConexion.getConexion()) {
-            PreparedStatement statement = c.prepareStatement(sql);
-            statement.setString(1, usuario);
-            statement.setString(2, constraseña);
-            resultSet = statement.executeQuery(sql);
-            if (resultSet.isBeforeFirst()) {
-                gestorBDD = (GestorBDD) getDatosGestor(resultSet);
-            } else {
-                System.out.println(Menu.MSG_ERROR_LOGIN_GESTOR);
-            }
-        }
-        return gestorBDD;
-    }
-
-    public static Vendedor getVendedor(String usuario, String constraseña) throws SQLException {
-        Vendedor vendedor = null;
-        ResultSet resultSet;
-        String sql = "SELECT * FROM Vendedores Where usuario = ? AND contraseña = ?";
-        try (Connection c = datosConexion.getConexion()) {
-            PreparedStatement statement = c.prepareStatement(sql);
-            statement.setString(1, usuario);
-            statement.setString(2, constraseña);
-            resultSet = statement.executeQuery(sql);
-            if (resultSet.isBeforeFirst()) {
-                vendedor = (Vendedor) getDatosVendedor(resultSet);
-            } else {
-                System.out.println(Menu.MSG_ERROR_LOGIN_GESTOR);
-            }
-        }
-        return vendedor;
-    }
-
-    private static Vendedor getDatosVendedor(ResultSet resultSet) throws SQLException {
-        Vendedor vendedor = null;
+    private static Administrador getDatosAdmin(ResultSet resultSet) throws SQLException {
+        Administrador admin = null;
         while (resultSet.next()) {
-            int idVendedor = resultSet.getInt(1);
-            String nombreVendedor = resultSet.getString(2);
-            String dniVendedor = resultSet.getString(3);
-            String direccionVendedor = resultSet.getString(4);
-            int codPostalVendedor = resultSet.getInt(5);
-            String ciudadVendedor = resultSet.getString(6);
-            int telefonoVendedor = resultSet.getInt(7);
-            String correoVendedor = resultSet.getString(8);
-            String usuarioVendedor = resultSet.getString(9);
-            String contraseñaVendedor = resultSet.getString(10);
-            vendedor = new Vendedor(idVendedor, nombreVendedor, dniVendedor, direccionVendedor, codPostalVendedor, ciudadVendedor, telefonoVendedor, correoVendedor, usuarioVendedor, contraseñaVendedor);
+            int idAdministrador = resultSet.getInt(1);
+            String nombreAdministrador = resultSet.getString(2);
+            String dniAdministrador = resultSet.getString(3);
+            String direccionAdministrador = resultSet.getString(4);
+            int codPostalAdministrador = resultSet.getInt(5);
+            String ciudadAdministrador = resultSet.getString(6);
+            int telefonoAdministrador = resultSet.getInt(7);
+            String correoAdministrador = resultSet.getString(8);
+            String usuarioAdministrador = resultSet.getString(9);
+            String contraseñaAdministrador = resultSet.getString(10);
+            admin = new Administrador(idAdministrador, nombreAdministrador, dniAdministrador, direccionAdministrador, codPostalAdministrador, ciudadAdministrador, telefonoAdministrador, correoAdministrador, usuarioAdministrador, contraseñaAdministrador) {
+            };
         }
-        return vendedor;
+        return admin;
     }
 
-    public static GestorBDD getDatosGestor(ResultSet resultSet) throws SQLException {
-        GestorBDD gestorBDD = null;
-        while (resultSet.next()) {
-            int idGestor = resultSet.getInt(1);
-            String nombreGestor = resultSet.getString(2);
-            String dniGestor = resultSet.getString(3);
-            String direccionGestor = resultSet.getString(4);
-            int codPostalGestor = resultSet.getInt(5);
-            String ciudadGestor = resultSet.getString(6);
-            int telefonoGestor = resultSet.getInt(7);
-            String correoGestor = resultSet.getString(8);
-            String usuarioGestor = resultSet.getString(9);
-            String contraseñaGestor = resultSet.getString(10);
-            gestorBDD = new GestorBDD(idGestor, nombreGestor, dniGestor, direccionGestor, codPostalGestor, ciudadGestor, telefonoGestor, correoGestor, usuarioGestor, contraseñaGestor);
-        }
-        return gestorBDD;
-    }
 
 
     private static Cliente getDatosDeCliente(ResultSet resultSet) throws SQLException {

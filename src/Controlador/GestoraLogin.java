@@ -1,18 +1,26 @@
 package Controlador;
 
+import Entidades.Usuarios.Administradores.Administrador;
 import Entidades.Usuarios.Administradores.GestorBDD;
 import Entidades.Usuarios.Persona;
+import Vistas.Constantes;
 import Vistas.Menu;
 import Vistas.Validaciones;
 
+import java.sql.SQLException;
+
 public class GestoraLogin {
 
-    public Persona showMenuLogin(){
+    public Administrador showMenuLogin(){
         String [] credenciales = new String[2];
-        boolean fin = false;
-        do{
+        try {
             credenciales = Menu.showLogin();
-        }while(Validaciones.validarCredenciales());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if(credenciales[2].equals(Constantes.ADMIN_GESTOR)){
+
+        }
     }
 
 }

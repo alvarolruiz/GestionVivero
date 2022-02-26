@@ -1,6 +1,8 @@
 package Vistas;
 
-import DataAccessLayer.gestoraLogIn.GestoraUsuarios;
+import DataAccessLayer.Listados.ListadosUsuarios;
+
+import java.sql.SQLException;
 
 public class Validaciones {
     //Todo -> Para la validacion habrá que hacer una clase que pueda acceder a la bdd y que obtenga los datos de los usuarios. Comprobar si los recibidos coinciden con
@@ -16,13 +18,11 @@ public class Validaciones {
         return correcto;
     }
 
-    public static char tipoAdministrador(String usuario){
-        return GestoraUsuarios.tipoAdministrador(usuario);
+    public static char getTipoAdministrador(String usuario){
+        return ListadosUsuarios.tipoAdministrador(usuario);
     }
 
-    public static boolean validarCredenciales(String usuario, String contraseña, char tipoUsuario) {
-        if(tipoUsuario==Constantes.ADMIN_GESTOR){
-
-        }
+    public static boolean validarCredenciales(String usuario, String contraseña, char tipoUsuario) throws SQLException {
+         return ListadosUsuarios.isValidLogin(usuario,contraseña,tipoUsuario);
     }
 }
