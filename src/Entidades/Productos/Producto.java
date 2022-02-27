@@ -1,6 +1,6 @@
 package Entidades.Productos;
 
-public abstract class Producto {
+public class Producto {
     private int id;
     private String descripcion;
     private double precioUnitario;

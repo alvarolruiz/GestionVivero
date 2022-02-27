@@ -39,7 +39,12 @@ public class Menu {
                                                        "1. Iniciar Venta"+
                                                        "0. Cerrar Sesion" +
                                                        SEPARATOR;
-    public static final String MSG_INSERCCIÓN_CORRECTA = "Los registros se han guardado correctamente";
+    public static final String MSG_ACTUALIZACION_CORRECTA = "Los registros se han actualizado correctamente";
+    public static final String MSG_ACTUALIZACION_FALLIDA = "Los registros no se han podido actualizar";
+    public static final String MSG_PRODUCTO_NO_EXISTE = "El producto que ha introducido no existe";
+    public static final String MSG_SUCCESSFUL_CONNECTION = "Conexión establecida con éxito";
+    public static final String MSG_FAILURE_CONNECTION = "No ha sido posible establecer la conexión";
+
 
     /**
      * Este método devuelve el login en el que los datos del vendedor/gestor validado.
@@ -143,5 +148,14 @@ public class Menu {
 
 
     public static void showMenuInicioGestor() {
+    }
+
+    public static void showMsgFilasAfectadas(int filasAfectadas) {
+        if (filasAfectadas > 0) {
+            System.out.println(Menu.MSG_ACTUALIZACION_CORRECTA);
+            System.out.println(filasAfectadas + " filas se han visto afectadas");
+        } else {
+            System.out.println(Menu.MSG_ACTUALIZACION_FALLIDA);
+        }
     }
 }

@@ -2,6 +2,9 @@ package DataAccessLayer.Listados;
 
 
 import DataAccessLayer.Conexion.DatosConexion;
+import Entidades.Productos.Producto;
+import Entidades.Productos.ProductoJardineria;
+import Entidades.Productos.ProductoPlanta;
 import Entidades.Usuarios.Administradores.Administrador;
 import Entidades.Usuarios.Administradores.GestorBDD;
 import Entidades.Usuarios.Administradores.Vendedor;
@@ -10,6 +13,8 @@ import Vistas.Constantes;
 import Vistas.Menu;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListadosUsuarios {
     /*
@@ -19,6 +24,66 @@ public class ListadosUsuarios {
     */
 
     private static DatosConexion datosConexion = new DatosConexion();
+
+    public static List<Cliente> getListaClientes() throws SQLException {
+        ArrayList<Cliente> listaClientes = new ArrayList<>();
+        Cliente cliente;
+        ResultSet resultSet;
+        String sql = "SELECT * FROM Clientes";
+        try (Connection c = datosConexion.getConexion()) {
+            PreparedStatement statement = c.prepareStatement(sql);
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.isBeforeFirst()) {
+                while (resultSet.next()) {
+                    cliente = getDatosDeCliente(resultSet);
+                    listaClientes.add(cliente);
+                }
+            } else {
+                System.out.println(Menu.MSG_SQL_EXEPTION);
+            }
+        }
+        return listaClientes;
+    }
+
+    public static List<Vendedor> getListaVendedores() throws SQLException {
+        ArrayList<Vendedor> listaClientes = new ArrayList<>();
+        Vendedor vendedor;
+        ResultSet resultSet;
+        String sql = "SELECT * FROM Vendedores";
+        try (Connection c = datosConexion.getConexion()) {
+            PreparedStatement statement = c.prepareStatement(sql);
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.isBeforeFirst()) {
+                while (resultSet.next()) {
+                    vendedor = (Vendedor) getDatosAdmin(resultSet);
+                    listaClientes.add(vendedor);
+                }
+            } else {
+                System.out.println(Menu.MSG_SQL_EXEPTION);
+            }
+        }
+        return listaClientes;
+    }
+
+    public static List<GestorBDD> getListaGestores() throws SQLException {
+        ArrayList<GestorBDD> listaGestores = new ArrayList<>();
+        GestorBDD gestor;
+        ResultSet resultSet;
+        String sql = "SELECT * FROM Gestores";
+        try (Connection c = datosConexion.getConexion()) {
+            PreparedStatement statement = c.prepareStatement(sql);
+            resultSet = statement.executeQuery(sql);
+            if (resultSet.isBeforeFirst()) {
+                while (resultSet.next()) {
+                    gestor = (GestorBDD) getDatosAdmin(resultSet);
+                    listaGestores.add(gestor);
+                }
+            } else {
+                System.out.println(Menu.MSG_SQL_EXEPTION);
+            }
+        }
+        return listaGestores;
+    }
 
     public static Cliente getClienteDni(String dni) throws SQLException {
         ResultSet result;
@@ -100,13 +165,13 @@ public class ListadosUsuarios {
         return vendedor;
     }
 
-    public static boolean isValidLogin(String usuario, String constraseña, char tipoAdmin) throws SQLException {
+    public static boolean isValidLogin(String usuario, String constraseña, char tipoAdmin) throws SQLException, NullPointerException {
         boolean isValidLogin = false;
         ResultSet resultSet;
         String sql = "";
-        if(tipoAdmin == Constantes.ADMIN_VENDEDOR){
+        if (tipoAdmin == Constantes.ADMIN_VENDEDOR) {
             sql = "SELECT * FROM Vendedores Where usuario = ? AND contraseña = ?";
-        }else if(tipoAdmin == Constantes.ADMIN_GESTOR){
+        } else if (tipoAdmin == Constantes.ADMIN_GESTOR) {
             sql = "SELECT * FROM Gestores Where usuario = ? AND contraseña = ?";
         }
         try (Connection c = datosConexion.getConexion()) {
@@ -123,7 +188,7 @@ public class ListadosUsuarios {
         return isValidLogin;
     }
 
-    public static char tipoAdministrador(String usuario) {
+    public static char tipoAdministrador(String usuario) throws SQLException, NullPointerException {
         char tipoUsuario = Constantes.ADMIN_NULO;
         if (isGestor(usuario)) {
             tipoUsuario = Constantes.ADMIN_GESTOR;
@@ -133,17 +198,17 @@ public class ListadosUsuarios {
         return tipoUsuario;
     }
 
-    private static boolean isGestor(String usuario) {
+    private static boolean isGestor(String usuario) throws SQLException, NullPointerException {
         String sql = "SELECT * FROM Gestores Where usuario = ?";
         return isRegistered(usuario, sql);
     }
 
-    private static boolean isVendedor(String usuario) {
+    private static boolean isVendedor(String usuario) throws SQLException, NullPointerException {
         String sql = "SELECT * FROM Vendedores Where usuario = ?";
         return isRegistered(usuario, sql);
     }
 
-    private static boolean isRegistered(String usuario, String sql) {
+    private static boolean isRegistered(String usuario, String sql) throws SQLException, NullPointerException {
         boolean exists = false;
         try (Connection c = datosConexion.getConexion()) {
             PreparedStatement statement = c.prepareStatement(sql);
@@ -152,46 +217,42 @@ public class ListadosUsuarios {
             if (result.isBeforeFirst()) {
                 exists = true;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return exists;
     }
 
     private static Administrador getDatosAdmin(ResultSet resultSet) throws SQLException {
         Administrador admin = null;
-        while (resultSet.next()) {
-            int idAdministrador = resultSet.getInt(1);
-            String nombreAdministrador = resultSet.getString(2);
-            String dniAdministrador = resultSet.getString(3);
-            String direccionAdministrador = resultSet.getString(4);
-            int codPostalAdministrador = resultSet.getInt(5);
-            String ciudadAdministrador = resultSet.getString(6);
-            int telefonoAdministrador = resultSet.getInt(7);
-            String correoAdministrador = resultSet.getString(8);
-            String usuarioAdministrador = resultSet.getString(9);
-            String contraseñaAdministrador = resultSet.getString(10);
-            admin = new Administrador(idAdministrador, nombreAdministrador, dniAdministrador, direccionAdministrador, codPostalAdministrador, ciudadAdministrador, telefonoAdministrador, correoAdministrador, usuarioAdministrador, contraseñaAdministrador) {
-            };
-        }
+        int idAdministrador = resultSet.getInt(1);
+        String nombreAdministrador = resultSet.getString(2);
+        String dniAdministrador = resultSet.getString(3);
+        String direccionAdministrador = resultSet.getString(4);
+        int codPostalAdministrador = resultSet.getInt(5);
+        String ciudadAdministrador = resultSet.getString(6);
+        int telefonoAdministrador = resultSet.getInt(7);
+        String correoAdministrador = resultSet.getString(8);
+        String usuarioAdministrador = resultSet.getString(9);
+        String contraseñaAdministrador = resultSet.getString(10);
+        admin = new Administrador(idAdministrador, nombreAdministrador, dniAdministrador, direccionAdministrador,
+                codPostalAdministrador, ciudadAdministrador, telefonoAdministrador, correoAdministrador,
+                usuarioAdministrador, contraseñaAdministrador);
+
         return admin;
     }
 
 
-
     private static Cliente getDatosDeCliente(ResultSet resultSet) throws SQLException {
         Cliente cliente = null;
-        while (resultSet.next()) {
-            int idCliente = resultSet.getInt(1);
-            String nombreCliente = resultSet.getString(2);
-            String dniCliente = resultSet.getString(3);
-            String direccionCliente = resultSet.getString(4);
-            int codPostalCliente = resultSet.getInt(5);
-            String ciudadCliente = resultSet.getString(6);
-            int telefonoCliente = resultSet.getInt(7);
-            String correoCliente = resultSet.getString(8);
-            cliente = new Cliente(idCliente, nombreCliente, dniCliente, direccionCliente, codPostalCliente, ciudadCliente, telefonoCliente, correoCliente);
-        }
+        int idCliente = resultSet.getInt(1);
+        String nombreCliente = resultSet.getString(2);
+        String dniCliente = resultSet.getString(3);
+        String direccionCliente = resultSet.getString(4);
+        int codPostalCliente = resultSet.getInt(5);
+        String ciudadCliente = resultSet.getString(6);
+        int telefonoCliente = resultSet.getInt(7);
+        String correoCliente = resultSet.getString(8);
+        cliente = new Cliente(idCliente, nombreCliente, dniCliente, direccionCliente, codPostalCliente, ciudadCliente,
+                telefonoCliente, correoCliente);
         return cliente;
     }
 }

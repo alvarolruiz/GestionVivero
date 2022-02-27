@@ -18,7 +18,7 @@ public class Validaciones {
         return correcto;
     }
 
-    public static char getTipoAdministrador(String usuario){
+    public static char getTipoAdministrador(String usuario) throws SQLException,NullPointerException{
         return ListadosUsuarios.tipoAdministrador(usuario);
     }
 

@@ -7,6 +7,7 @@ public class Administrador extends Persona {
     private String user;
     private String password;
 
+
     public Administrador(int id, String nombre, String dni, String direccion, int codPostal, String ciudad, int telefono, String correoElectronico, String user, String password) {
         super(nombre, dni, direccion, codPostal, ciudad, telefono, correoElectronico);
         this.id = id;
@@ -20,5 +21,9 @@ public class Administrador extends Persona {
 
     public String getUser() {
         return user;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

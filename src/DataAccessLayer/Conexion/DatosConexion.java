@@ -1,10 +1,9 @@
 package DataAccessLayer.Conexion;
 
 import Vistas.Constantes;
+import Vistas.Menu;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,7 +15,7 @@ import java.util.Properties;
  *
  */
 public class DatosConexion {
-
+//TODO Conseguir que funcione la conexion. Da un problema con el puerto 1433 y con ssl
 
     private Properties propiedadesConexion;
 
@@ -35,10 +34,10 @@ public class DatosConexion {
        try{
            conn = DriverManager.getConnection(getConnectionString());
            if(conn!=null){
-               System.out.println(Constantes.MSG_SUCCESSFUL_CONNECTION);
+               System.out.println(Menu.MSG_SUCCESSFUL_CONNECTION);
            }
-       }catch (SQLException e){
-           System.out.println(Constantes.MSG_FAILURE_CONNECTION);
+       }catch (SQLException e) {
+           System.out.println(Menu.MSG_FAILURE_CONNECTION);
        }
        return conn;
 
@@ -54,7 +53,10 @@ public class DatosConexion {
 
     private void cargarFicheroConfig() {
         try {
-            propiedadesConexion.load(new FileInputStream(new File(Constantes.NOMBRE_FICHERO_PROPIEDADES)));
+            FileInputStream fis  =  new FileInputStream("D:\\IdeaProjects\\GestionVivero\\src\\DataAccessLayer\\Conexion\\ConfiguracionConexion.properties");
+            propiedadesConexion.load(fis);
+        } catch (FileNotFoundException e) {
+            System.out.println("Fichero no encontrado");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,7 +67,9 @@ public class DatosConexion {
      * @return String
      */
    private String getConnectionString(){
-        return propiedadesConexion.getProperty("Url") + propiedadesConexion.getProperty("Usuario")
-                + propiedadesConexion.getProperty("Clave");
+       String url = propiedadesConexion.getProperty("Url");
+       String usuario = propiedadesConexion.getProperty("Usuario");
+       String clave = propiedadesConexion.getProperty("Clave");
+       return url + usuario +clave;
    }
 }

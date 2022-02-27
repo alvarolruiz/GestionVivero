@@ -1,12 +1,15 @@
 Hecho:
-Entidades, Menu login
+Entidades, Menu login, ListaosFacturas
 
 Vista:
 
 Menu:
 
 Gestoras:
-GestorBDD, Posee un objeto gestor o es el propio gestor??
+gestoraCliente, Facturas, gestresBDD, Vendedores, Productos
+
+Listados:
+ListadosFacturas, ListadosProductos, ListadosUsuarios,
 
 Generador Informes:
 Constará de varios métodos que recibirán una fecha de inicio, tipo (anual o mensual)

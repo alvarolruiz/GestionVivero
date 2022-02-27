@@ -25,7 +25,7 @@ public class GestoraMenuVendedor {
         this.vendedorLogeado = vendedorLogeado;
     }
 
-    public void showMenu() throws SQLException {
+    public void showMenuVend() throws SQLException {
         int opcion = 0;
         boolean fin = false;
         do {
@@ -75,17 +75,13 @@ public class GestoraMenuVendedor {
      * irá llamando a otro método guardar lineaFactura por cada una de entrads que tiene la lista de facturas
      * @param factura
      */
-    private void guardarFactura(Factura factura) {
+    private void guardarFactura(Factura factura) throws SQLException {
         int filasAfectadasFacturas = 0;
         int filasAfectadasLineas = 0;
-        try {
-            filasAfectadasFacturas = GestoraFacturas.añadirFactura(factura);
-            filasAfectadasLineas = GestoraFacturas.añadirFilasFactura(factura.getArticulos());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        filasAfectadasFacturas = GestoraFacturas.añadirFactura(factura);
+        filasAfectadasLineas = GestoraFacturas.añadirFilasFactura(factura.getArticulos());
         if(filasAfectadasFacturas == 1 && filasAfectadasLineas >=1){
-            System.out.println(Menu.MSG_INSERCCIÓN_CORRECTA);
+            System.out.println(Menu.MSG_ACTUALIZACION_CORRECTA);
         }
     }
 
@@ -97,6 +93,7 @@ public class GestoraMenuVendedor {
      */
 
     private Producto getProducto(int codigoProducto) {
+
         Producto producto= null;
         return producto;
     }

@@ -1,7 +1,7 @@
 package Entidades.Productos;
 
 public class ProductoPlanta extends Producto{
-    private int tipoPlanta;
+    private Integer tipoPlanta;
 
     public int getTipoPlanta() {
         return tipoPlanta;

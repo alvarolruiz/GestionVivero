@@ -91,6 +91,10 @@ public abstract class Persona {
         this.telefono = telefono;
     }
 
+    public String getCorreoElectronico() {
+        return correoElectronico;
+    }
+
     @Override
     public String toString() {
         return "Persona{" +
