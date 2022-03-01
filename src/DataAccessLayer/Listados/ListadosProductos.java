@@ -4,8 +4,7 @@ import DataAccessLayer.Conexion.DatosConexion;
 import Entidades.Productos.Producto;
 import Entidades.Productos.ProductoJardineria;
 import Entidades.Productos.ProductoPlanta;
-import Entidades.Usuarios.Administradores.GestorBDD;
-import Vistas.Menu;
+import Vistas.Mensajes;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,11 +24,12 @@ public class ListadosProductos {
         try (Connection c = datosConexion.getConexion()) {
             PreparedStatement statement = c.prepareStatement(sql);
             statement.setInt(1, idProducto);
-            resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery();
             if (resultSet.isBeforeFirst()) {
+                resultSet.next();
                 producto = getDatosProducto(resultSet);
             } else {
-                System.out.println(Menu.MSG_PRODUCTO_NO_EXISTE);
+                System.out.println(Mensajes.MSG_PRODUCTO_NO_EXISTE);
             }
         }
         return producto;
@@ -49,19 +49,19 @@ public class ListadosProductos {
         String sql = "SELECT * FROM view_ProductosTipo";
         try (Connection c = datosConexion.getConexion()) {
             PreparedStatement statement = c.prepareStatement(sql);
-            resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery();
             if (resultSet.isBeforeFirst()) {
                 while (resultSet.next()) {
                     if (isProductoPlanta(resultSet)) {
                         productoPlanta = getDatosProductoPlanta(resultSet);
                         listaProductos.add(productoPlanta);
                     }else{
-                        productoJardineria = (ProductoJardineria) getDatosProducto(resultSet);
+                        productoJardineria = new ProductoJardineria(getDatosProducto(resultSet));
                         listaProductos.add(productoJardineria);
                     }
                 }
             } else {
-                System.out.println(Menu.MSG_SQL_EXEPTION);
+                System.out.println(Mensajes.MSG_SQL_EXEPTION);
             }
         }
         return listaProductos;
@@ -91,7 +91,7 @@ public class ListadosProductos {
 
     private static boolean isProductoPlanta(ResultSet resultSet) throws SQLException {
         boolean isPlanta = true;
-        if (Integer.valueOf(resultSet.getString(5)) == null) {
+        if (resultSet.getString(5)== null) {
             isPlanta = false;
         }
         return isPlanta;

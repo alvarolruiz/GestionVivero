@@ -2,15 +2,12 @@ package DataAccessLayer.Listados;
 
 
 import DataAccessLayer.Conexion.DatosConexion;
-import Entidades.Productos.Producto;
-import Entidades.Productos.ProductoJardineria;
-import Entidades.Productos.ProductoPlanta;
 import Entidades.Usuarios.Administradores.Administrador;
 import Entidades.Usuarios.Administradores.GestorBDD;
 import Entidades.Usuarios.Administradores.Vendedor;
 import Entidades.Usuarios.Cliente;
 import Vistas.Constantes;
-import Vistas.Menu;
+import Vistas.Mensajes;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -32,14 +29,14 @@ public class ListadosUsuarios {
         String sql = "SELECT * FROM Clientes";
         try (Connection c = datosConexion.getConexion()) {
             PreparedStatement statement = c.prepareStatement(sql);
-            resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery();
             if (resultSet.isBeforeFirst()) {
                 while (resultSet.next()) {
                     cliente = getDatosDeCliente(resultSet);
                     listaClientes.add(cliente);
                 }
             } else {
-                System.out.println(Menu.MSG_SQL_EXEPTION);
+                System.out.println(Mensajes.MSG_SQL_EXEPTION);
             }
         }
         return listaClientes;
@@ -52,14 +49,14 @@ public class ListadosUsuarios {
         String sql = "SELECT * FROM Vendedores";
         try (Connection c = datosConexion.getConexion()) {
             PreparedStatement statement = c.prepareStatement(sql);
-            resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery();
             if (resultSet.isBeforeFirst()) {
                 while (resultSet.next()) {
-                    vendedor = (Vendedor) getDatosAdmin(resultSet);
+                    vendedor = new Vendedor(getDatosAdmin(resultSet));
                     listaClientes.add(vendedor);
                 }
             } else {
-                System.out.println(Menu.MSG_SQL_EXEPTION);
+                System.out.println(Mensajes.MSG_SQL_EXEPTION);
             }
         }
         return listaClientes;
@@ -72,14 +69,14 @@ public class ListadosUsuarios {
         String sql = "SELECT * FROM Gestores";
         try (Connection c = datosConexion.getConexion()) {
             PreparedStatement statement = c.prepareStatement(sql);
-            resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery();
             if (resultSet.isBeforeFirst()) {
                 while (resultSet.next()) {
-                    gestor = (GestorBDD) getDatosAdmin(resultSet);
+                    gestor = new GestorBDD(getDatosAdmin(resultSet));
                     listaGestores.add(gestor);
                 }
             } else {
-                System.out.println(Menu.MSG_SQL_EXEPTION);
+                System.out.println(Mensajes.MSG_SQL_EXEPTION);
             }
         }
         return listaGestores;
@@ -92,18 +89,28 @@ public class ListadosUsuarios {
         try (Connection c = datosConexion.getConexion()) {
             PreparedStatement statement = c.prepareStatement(sql);
             statement.setString(1, dni);
-            result = statement.executeQuery(sql);
+            result = statement.executeQuery();
             if (result.isBeforeFirst()) {
+                result.next();
                 cliente = getDatosDeCliente(result);
             } else {
-                sql = "Select * FROM Clientes WHERE idCliente =?";
-                statement = c.prepareStatement(sql);
-                statement.setString(1, String.valueOf(Constantes.ID_CLIENTE_NO_REGISTRADO));
-                result = statement.executeQuery(sql);
-                cliente = getDatosDeCliente(result);
+                cliente = getClienteNoRegistrado();
             }
         }
         return cliente;
+    }
+
+    public static Cliente getClienteNoRegistrado() throws SQLException {
+        String sql = "Select * FROM Clientes WHERE idCliente =?";
+        ResultSet result;
+        Cliente cliente;
+        try (Connection c = datosConexion.getConexion()){
+            PreparedStatement statement = c.prepareStatement(sql);
+            statement.setInt(1, Constantes.ID_CLIENTE_NO_REGISTRADO);
+            result = statement.executeQuery();
+            cliente = getDatosDeCliente(result);
+        }
+       return cliente;
     }
 
     public static Cliente getClienteTelefono(int telefono) {
@@ -113,15 +120,12 @@ public class ListadosUsuarios {
         try (Connection c = datosConexion.getConexion()) {
             PreparedStatement statement = c.prepareStatement(sql);
             statement.setString(1, String.valueOf(telefono));
-            result = statement.executeQuery(sql);
+            result = statement.executeQuery();
             if (result.isBeforeFirst()) {
+                result.next();
                 cliente = getDatosDeCliente(result);
             } else {
-                sql = "Select * FROM Clientes WHERE idCliente =?";
-                statement = c.prepareStatement(sql);
-                statement.setString(1, String.valueOf(Constantes.ID_CLIENTE_NO_REGISTRADO));
-                result = statement.executeQuery();
-                cliente = getDatosDeCliente(result);
+                cliente =getClienteNoRegistrado();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -137,11 +141,12 @@ public class ListadosUsuarios {
             PreparedStatement statement = c.prepareStatement(sql);
             statement.setString(1, usuario);
             statement.setString(2, constraseña);
-            resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery();
             if (resultSet.isBeforeFirst()) {
-                gestorBDD = (GestorBDD) getDatosAdmin(resultSet);
+                resultSet.next();
+                gestorBDD = new GestorBDD(getDatosAdmin(resultSet));
             } else {
-                System.out.println(Menu.MSG_ERROR_LOGIN_GESTOR);
+                System.out.println(Mensajes.MSG_ERROR_LOGIN_GESTOR);
             }
         }
         return gestorBDD;
@@ -155,11 +160,12 @@ public class ListadosUsuarios {
             PreparedStatement statement = c.prepareStatement(sql);
             statement.setString(1, usuario);
             statement.setString(2, constraseña);
-            resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery();
             if (resultSet.isBeforeFirst()) {
-                vendedor = (Vendedor) getDatosAdmin(resultSet);
+                resultSet.next();
+                vendedor = new Vendedor(getDatosAdmin(resultSet));
             } else {
-                System.out.println(Menu.MSG_ERROR_LOGIN_GESTOR);
+                System.out.println(Mensajes.MSG_ERROR_LOGIN_GESTOR);
             }
         }
         return vendedor;
@@ -178,11 +184,11 @@ public class ListadosUsuarios {
             PreparedStatement statement = c.prepareStatement(sql);
             statement.setString(1, usuario);
             statement.setString(2, constraseña);
-            resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery();
             if (resultSet.isBeforeFirst()) {
                 isValidLogin = true;
             } else {
-                System.out.println(Menu.MSG_ERROR_LOGIN_GESTOR);
+                System.out.println(Mensajes.MSG_ERROR_LOGIN_GESTOR);
             }
         }
         return isValidLogin;
@@ -213,7 +219,7 @@ public class ListadosUsuarios {
         try (Connection c = datosConexion.getConexion()) {
             PreparedStatement statement = c.prepareStatement(sql);
             statement.setString(1, usuario);
-            ResultSet result = statement.executeQuery(sql);
+            ResultSet result = statement.executeQuery();
             if (result.isBeforeFirst()) {
                 exists = true;
             }
@@ -239,7 +245,6 @@ public class ListadosUsuarios {
 
         return admin;
     }
-
 
     private static Cliente getDatosDeCliente(ResultSet resultSet) throws SQLException {
         Cliente cliente = null;

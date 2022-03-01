@@ -2,23 +2,24 @@ package DataAccessLayer.Gestoras;
 
 import DataAccessLayer.Conexion.DatosConexion;
 import Entidades.Usuarios.Administradores.Vendedor;
-import Vistas.Menu;
+import Vistas.Mensajes;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class GestoraVendedores {
+
     public static DatosConexion datosConexion = new DatosConexion();
 
     public static int insertarVendedor(Vendedor vendedor) throws SQLException {
         int filasAfectadas = 0;
-        String sql = "Insert Into Gestores Values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "Insert Into Vendedores Values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection c = datosConexion.getConexion()) {
             PreparedStatement statement = c.prepareStatement(sql);
             statement = setParametersForInsertVendedor(vendedor, statement);
             filasAfectadas = statement.executeUpdate();
-            Menu.showMsgFilasAfectadas(filasAfectadas);
+            Mensajes.showMsgFilasAfectadas(filasAfectadas);
         }
         return filasAfectadas;
     }
@@ -29,7 +30,7 @@ public class GestoraVendedores {
             PreparedStatement statement = c.prepareStatement(sql);
             statement.setInt(1, idVendedor);
             filasAfectadas = statement.executeUpdate();
-            Menu.showMsgFilasAfectadas(filasAfectadas);
+            Mensajes.showMsgFilasAfectadas(filasAfectadas);
         }
         return filasAfectadas;
     }
@@ -42,7 +43,7 @@ public class GestoraVendedores {
             statement = setParametersForInsertVendedor(vendedor, statement);
             statement.setInt(10, vendedor.getId());
             filasAfectadas = statement.executeUpdate();
-            Menu.showMsgFilasAfectadas(filasAfectadas);
+            Mensajes.showMsgFilasAfectadas(filasAfectadas);
         }
         return filasAfectadas;
     }

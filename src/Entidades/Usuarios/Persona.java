@@ -1,6 +1,7 @@
 package Entidades.Usuarios;
 
 public abstract class Persona {
+    private int id;
     private String nombre;
     private String dni;
     private String direccion;
@@ -10,7 +11,8 @@ public abstract class Persona {
     private String correoElectronico;
 
 
-    public Persona(String nombre, String dni, String direccion, int codPostal, String ciudad, int telefono, String correoElectronico) {
+    public Persona(int id, String nombre, String dni, String direccion, int codPostal, String ciudad, int telefono, String correoElectronico) {
+        this.id = id;
         this.nombre = nombre;
         this.dni = dni;
         this.direccion = direccion;
@@ -20,15 +22,17 @@ public abstract class Persona {
         this.correoElectronico = correoElectronico;
     }
 
-    public Persona(String dni) {
-        this.nombre = null;
-        this.dni = dni;
-        this.direccion = null;
-        this.codPostal = 0;
-        this.ciudad = null;
-        this.telefono = 0;
-        this.correoElectronico = null;
+    public Persona (Persona persona){
+        this.id = persona.getId();
+        this.nombre = persona.getNombre();
+        this.dni = persona.getDni();
+        this.direccion = persona.getDireccion();
+        this.codPostal = persona.getCodPostal();
+        this.ciudad = persona.getCiudad();
+        this.telefono = persona.getTelefono();
+        this.correoElectronico = persona.getCorreoElectronico();
     }
+
 
     public Persona(int telefono) {
         this.nombre = null;
@@ -41,6 +45,10 @@ public abstract class Persona {
     }
 
     public Persona() {
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getNombre() {

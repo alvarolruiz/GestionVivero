@@ -33,6 +33,9 @@ public class Factura {
 
     }
 
+    public void setImporteTotal() {
+        calcularImporteTotal();
+    }
 
     public int getIdFactura() {
         return idFactura;
@@ -72,10 +75,5 @@ public class Factura {
         }
         this.importeTotal = total;
     }
-
-    public void imprimirFactura() {
-
-    }
-
 
 }

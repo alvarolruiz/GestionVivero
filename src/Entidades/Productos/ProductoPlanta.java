@@ -15,4 +15,10 @@ public class ProductoPlanta extends Producto{
         super(codigo, descripcion, precioUnitario, unidadesDisponibles);
         this.tipoPlanta = tipoPlanta;
     }
+
+    public ProductoPlanta(Producto producto, Integer tipoPlanta) {
+        super(producto);
+        this.tipoPlanta = tipoPlanta;
+    }
+
 }

@@ -1,7 +1,6 @@
 package DataAccessLayer.Conexion;
 
-import Vistas.Constantes;
-import Vistas.Menu;
+import Vistas.Mensajes;
 
 import java.io.*;
 import java.sql.Connection;
@@ -32,12 +31,9 @@ public class DatosConexion {
    public Connection getConexion(){
        Connection conn = null;
        try{
-           conn = DriverManager.getConnection(getConnectionString());
-           if(conn!=null){
-               System.out.println(Menu.MSG_SUCCESSFUL_CONNECTION);
-           }
+           conn = DriverManager.getConnection(getConnectionString(), propiedadesConexion.getProperty("Usuario"), propiedadesConexion.getProperty("Clave"));
        }catch (SQLException e) {
-           System.out.println(Menu.MSG_FAILURE_CONNECTION);
+           System.out.println(Mensajes.MSG_FAILURE_CONNECTION);
        }
        return conn;
 
@@ -68,8 +64,6 @@ public class DatosConexion {
      */
    private String getConnectionString(){
        String url = propiedadesConexion.getProperty("Url");
-       String usuario = propiedadesConexion.getProperty("Usuario");
-       String clave = propiedadesConexion.getProperty("Clave");
-       return url + usuario +clave;
+       return url;
    }
 }

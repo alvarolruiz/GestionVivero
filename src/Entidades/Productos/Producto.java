@@ -13,6 +13,13 @@ public class Producto {
         this.unidadesDisponibles = unidadesDisponibles;
     }
 
+    public Producto (Producto producto){
+        this.id = producto.getId();
+        this.descripcion = producto.getDescripcion();
+        this.precioUnitario = producto.getPrecioUnitario();
+        this.unidadesDisponibles = producto.getUnidadesDisponibles();
+    }
+
     public int getId() {
         return id;
     }
@@ -33,7 +40,7 @@ public class Producto {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(float precioUnitario) {
+    public void setPrecioUnitario(double precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 

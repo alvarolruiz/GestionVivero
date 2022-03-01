@@ -10,19 +10,29 @@ import Entidades.Productos.Producto;
 import Entidades.Productos.ProductoJardineria;
 import Entidades.Productos.ProductoPlanta;
 import Entidades.Usuarios.Cliente;
+import Entidades.Usuarios.Persona;
 
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 // Necesito poder acceder con este usuario y tener todos los permisos en la bdd
-public class GestorBDD extends Vendedor {
+public class GestorBDD extends Administrador {
 
     public static final String  SEPARATOR = "-----------------------------------------------------------------------------";
 
-    public GestorBDD(int idVendedor, String nombre, String dni, String direccion, int codPostal, String ciudad, int telefono, String correoElectronico, String user, String password) {
-        super(idVendedor, nombre, dni, direccion, codPostal, ciudad, telefono, correoElectronico, user, password);
+    public GestorBDD(int id, String nombre, String dni, String direccion, int codPostal, String ciudad, int telefono, String correoElectronico, String user, String password) {
+        super(id, nombre, dni, direccion, codPostal, ciudad, telefono, correoElectronico, user, password);
     }
+
+    public GestorBDD(Persona persona, String user, String password) {
+        super(persona, user, password);
+    }
+
+    public GestorBDD(Administrador admin) {
+        super(admin);
+    }
+
     // Métodos para obtener listados de todas las tablas
     public void getProductos() throws SQLException {
         ArrayList<Producto> listadoProductos = new ArrayList<>(ListadosProductos.getListaProductos());
@@ -35,7 +45,7 @@ public class GestorBDD extends Vendedor {
     }
 
     public void getVendedores() throws SQLException {
-        ArrayList<Administrador> listadoVendedores = new ArrayList<>(ListadosUsuarios.getListaGestores());
+        ArrayList<Administrador> listadoVendedores = new ArrayList<>(ListadosUsuarios.getListaVendedores());
         imprimirTablaAdministradores(listadoVendedores);
     }
 
@@ -105,7 +115,7 @@ public class GestorBDD extends Vendedor {
 
     private void imprimirTablaAdministradores(ArrayList<Administrador> listadoAdministradores) {
         System.out.println(SEPARATOR);
-        System.out.printf("%5s %15s %15s %10s %5s %20s", "ID", "NOMBRE", "USUARIO", "DNI", "CIUDAD", "TELEFONO");
+        System.out.printf("%5s %15s %15s %10s %15s %10s", "ID", "NOMBRE", "USUARIO", "DNI", "CIUDAD", "TELEFONO");
         System.out.println();
         System.out.println(SEPARATOR);
         for (Administrador  ad: listadoAdministradores) {
@@ -115,14 +125,14 @@ public class GestorBDD extends Vendedor {
     }
 
     private void imprimirAdministrador(Administrador ad) {
-        System.out.format("%5s %15s %15s %10s %5d %20d",
+        System.out.format("%5d %15s %15s %10s %15s %10d",
                 ad.getId(), ad.getNombre(), ad.getUser(), ad.getDni(), ad.getCiudad(), ad.getTelefono());
         System.out.println();
     }
 
     private void imprimirTablaClientes(ArrayList<Cliente> listadoClientes) {
         System.out.println(SEPARATOR);
-        System.out.printf("%5s %15s %10s %5s %20s", "ID", "NOMBRE", "DNI", "CIUDAD", "TELEFONO");
+        System.out.printf("%5s %20s %10s %5s %20s", "ID", "NOMBRE", "DNI", "CIUDAD", "TELEFONO");
         System.out.println();
         System.out.println(SEPARATOR);
         for (Cliente  c: listadoClientes) {
@@ -132,7 +142,7 @@ public class GestorBDD extends Vendedor {
     }
 
     private void imprimirCliente(Cliente c) {
-        System.out.format("%5s %15s %10s %5d %20d",
+        System.out.format("%5s %20s %10s %5s %20d",
                 c.getId(), c.getNombre(), c.getDni(), c.getCiudad(), c.getTelefono());
         System.out.println();
     }

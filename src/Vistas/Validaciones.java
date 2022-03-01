@@ -10,11 +10,9 @@ public class Validaciones {
 
     public static boolean validarOpcion(int opcion, int[] opcionesMenu) {
         Boolean correcto = false;
-        for (int i = 0; i < opcionesMenu.length; i++) {
-            if(opcion==opcionesMenu[i]){
+            if(opcion>=opcionesMenu[0] && opcion <= opcionesMenu[1]){
             correcto=true;
             }
-        }
         return correcto;
     }
 

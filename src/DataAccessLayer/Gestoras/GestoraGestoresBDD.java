@@ -2,7 +2,7 @@ package DataAccessLayer.Gestoras;
 
 import DataAccessLayer.Conexion.DatosConexion;
 import Entidades.Usuarios.Administradores.GestorBDD;
-import Vistas.Menu;
+import Vistas.Mensajes;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +11,7 @@ import java.sql.SQLException;
 public class GestoraGestoresBDD {
 
     public static DatosConexion datosConexion = new DatosConexion();
+
     public static int insertarGestorBDD(GestorBDD gestorBDD) throws SQLException {
         int filasAfectadas = 0;
         String sql = "Insert Into Gestores Values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -18,7 +19,7 @@ public class GestoraGestoresBDD {
             PreparedStatement statement = c.prepareStatement(sql);
             statement = setParametersForInsertGestor(gestorBDD, statement);
             filasAfectadas = statement.executeUpdate();
-            Menu.showMsgFilasAfectadas(filasAfectadas);
+            Mensajes.showMsgFilasAfectadas(filasAfectadas);
         }
         return filasAfectadas;
     }
@@ -32,7 +33,7 @@ public class GestoraGestoresBDD {
             PreparedStatement statement = c.prepareStatement(sql);
             statement.setInt(1, idGestor);
             filasAfectadas = statement.executeUpdate();
-            Menu.showMsgFilasAfectadas(filasAfectadas);
+            Mensajes.showMsgFilasAfectadas(filasAfectadas);
         }
         return filasAfectadas;
     }
@@ -45,7 +46,7 @@ public class GestoraGestoresBDD {
             statement = setParametersForInsertGestor(gestorBDD, statement);
             statement.setInt(10, gestorBDD.getId());
             filasAfectadas = statement.executeUpdate();
-            Menu.showMsgFilasAfectadas(filasAfectadas);
+            Mensajes.showMsgFilasAfectadas(filasAfectadas);
         }
         return filasAfectadas;
     }
