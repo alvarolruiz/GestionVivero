@@ -24,8 +24,7 @@ public class Mensajes {
             "Introduzca D o T:";
     public static final String MSG_PEDIR_DNI_CLIENTE = "Introduce el dni del cliente:";
     public static final String MSG_PEDIR_TELEFONO_CLIENTE = "Introduce el telefono del cliente:";
-    public static final String MSG_CLIENTE_NO_REGISTRADO = "Cliente no registrado. No podrá disfrutar de los descuentos" +
-            "de afiliado.";
+    public static final String MSG_CLIENTE_NO_REGISTRADO = "Cliente no registrado. No podrá disfrutar de los descuentos de afiliado.";
     public static final String MSG_LINEA_FACTURA = "Nueva linea factura" + "\n" +
             SEPARATOR;
     public static final String MSG_COD_PROD = "Código de producto:";
@@ -106,16 +105,18 @@ public static final String MSG_AVISO_UPDATE = "Debe introducir un id que coincid
 
     public static Cliente preguntarDatosCliente() throws SQLException {
         String dniOTelefono;
+        String respuesta;
         Cliente clienteComprador = null;
-        System.out.println(Mensajes.MSG_PEDIR_DATOS_CLIENTE);
-        String respuesta = tecla.nextLine();
+        boolean correcto = false;
+        respuesta = preguntarDniOTelefono();
         if (respuesta.equalsIgnoreCase("D")) {
-            System.out.println(Mensajes.MSG_PEDIR_DNI_CLIENTE);
-            dniOTelefono = tecla.nextLine();
-            clienteComprador = ListadosUsuarios.getClienteDni(dniOTelefono);
-            if (clienteComprador.getId() == Constantes.ID_CLIENTE_NO_REGISTRADO) {
-                System.out.println(Mensajes.MSG_CLIENTE_NO_REGISTRADO);
-            }
+                System.out.println(Mensajes.MSG_PEDIR_DNI_CLIENTE);
+                dniOTelefono = tecla.nextLine();
+                clienteComprador = ListadosUsuarios.getClienteDni(dniOTelefono);
+                if (clienteComprador.getId() == Constantes.ID_CLIENTE_NO_REGISTRADO) {
+                    System.out.println(Mensajes.MSG_CLIENTE_NO_REGISTRADO);
+
+                }
         } else if (respuesta.equalsIgnoreCase("T")) {
             System.out.println(Mensajes.MSG_PEDIR_TELEFONO_CLIENTE);
             dniOTelefono = tecla.nextLine();
@@ -125,6 +126,19 @@ public static final String MSG_AVISO_UPDATE = "Debe introducir un id que coincid
             }
         }
         return clienteComprador;
+    }
+
+    private static String preguntarDniOTelefono(){
+        String respuesta;
+        boolean correcto = false;
+        do{
+            System.out.println(Mensajes.MSG_PEDIR_DATOS_CLIENTE);
+            respuesta = tecla.nextLine();
+            if(respuesta.equalsIgnoreCase("D") || respuesta.equalsIgnoreCase("T")){
+                correcto=true;
+            }
+        }while (!correcto);
+        return respuesta;
     }
 
     public static Producto pedirDatosProducto (){

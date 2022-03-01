@@ -100,18 +100,6 @@ public class ListadosUsuarios {
         return cliente;
     }
 
-    public static Cliente getClienteNoRegistrado() throws SQLException {
-        String sql = "Select * FROM Clientes WHERE idCliente =?";
-        ResultSet result;
-        Cliente cliente;
-        try (Connection c = datosConexion.getConexion()){
-            PreparedStatement statement = c.prepareStatement(sql);
-            statement.setInt(1, Constantes.ID_CLIENTE_NO_REGISTRADO);
-            result = statement.executeQuery();
-            cliente = getDatosDeCliente(result);
-        }
-       return cliente;
-    }
 
     public static Cliente getClienteTelefono(int telefono) {
         Cliente cliente = null;
@@ -129,6 +117,20 @@ public class ListadosUsuarios {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return cliente;
+    }
+
+    public static Cliente getClienteNoRegistrado() throws SQLException {
+        String sql = "Select * FROM Clientes WHERE idCliente =?";
+        ResultSet result;
+        Cliente cliente;
+        try (Connection c = datosConexion.getConexion()){
+            PreparedStatement statement = c.prepareStatement(sql);
+            statement.setInt(1, Constantes.ID_CLIENTE_NO_REGISTRADO);
+            result = statement.executeQuery();
+            result.next();
+            cliente = getDatosDeCliente(result);
         }
         return cliente;
     }

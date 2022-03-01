@@ -51,7 +51,7 @@ public class Vendedor extends Administrador {
     public void imprimirTablaLineasFactura(List<FilaFactura> articulos){
         System.out.println("Artículos");
         System.out.println(SEPARATOR);
-        System.out.printf("%10s %7s %7s %10s", "ID PRODUCTO", "CANTIDAD", "PRECIO", "TOTAL");
+        System.out.printf("%15s %20s %15s %15s", "ID_PRODUCTO", "CANTIDAD", "PRECIO", "TOTAL");
         System.out.println();
         System.out.println(SEPARATOR);
         for (FilaFactura ff: articulos) {
@@ -61,7 +61,7 @@ public class Vendedor extends Administrador {
     }
 
     private void imprimirLineaFactura(FilaFactura filaFactura) {
-        System.out.printf("%15s %15s %15s %10s %15s",
+        System.out.printf("%15d %20d %15f %15f",
                 filaFactura.getIdProducto(), filaFactura.getCantidad(), filaFactura.getPrecioUnitario(), filaFactura.getTotalFila());
         System.out.println();
     }

@@ -15,11 +15,10 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class GestoraMenuVendedor {
+    //TODO Aplicar descuento de cliente y avisar al usuario del descuento generado
     private static Scanner tecla = new Scanner(System.in);
 
     private Vendedor vendedorLogeado;
-
-
 
     public GestoraMenuVendedor(Vendedor vendedorLogeado) {
         this.vendedorLogeado = vendedorLogeado;
@@ -74,7 +73,7 @@ public class GestoraMenuVendedor {
             } else {
                 System.out.println("Producto no existe");
             }
-        }while (fila!=null);
+        }while (fila==null);
         return fila;
     }
 
