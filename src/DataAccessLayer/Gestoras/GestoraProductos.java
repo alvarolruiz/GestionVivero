@@ -7,10 +7,7 @@ import Entidades.Productos.ProductoJardineria;
 import Entidades.Productos.ProductoPlanta;
 import Vistas.Mensajes;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class GestoraProductos {
     private static DatosConexion datosConexion = new DatosConexion();
@@ -18,7 +15,7 @@ public class GestoraProductos {
     public static int insertarProductoPlanta(ProductoPlanta productoPlanta) throws SQLException {
         int filasAfectadas = 0;
         try (Connection c = datosConexion.getConexion()) {
-            String sql = "{call sp_InsertProductoPlanta @descripcion = ?, @precioUnitario =  ?, @unidadesDisponibles =  ?, @idTipoPlanta = ?";
+            String sql = "EXEC sp_InsertProductoPlanta @descripcion = ?, @precioUnitario =  ?, @unidadesDisponibles =  ?, @idTipoPlanta = ?";
             CallableStatement cst = c.prepareCall(sql);
             cst.setString(1, productoPlanta.getDescripcion());
             cst.setDouble(2, productoPlanta.getPrecioUnitario());
@@ -46,7 +43,7 @@ public class GestoraProductos {
 
     public static int updateProductoPlanta(ProductoPlanta productoPlanta) throws SQLException {
         int filasAfectadas = 0;
-        String sql = "EXEC sp_actualizarProductoPlanta @id = ?, @descripcion =  ?, @precioUnitario = ?, @unidadesDisponibles =  ?, @tipoPlanta = ?";
+        String sql = "EXEC sp_actualizarProductoPlanta @id = ?, @descripcion =  ?, @precioUnitario = ?, @unidadesDisponibles =  ?, @idTipoPlanta = ?";
         try (Connection c = datosConexion.getConexion()) {
             CallableStatement cst = c.prepareCall(sql);
             cst.setInt(1, productoPlanta.getId());
@@ -101,6 +98,8 @@ public class GestoraProductos {
         }
         return filasAfectadas;
     }
+
+
 
 
 }

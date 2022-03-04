@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class MenuGestor {
     private static Scanner tecla = new Scanner(System.in);
-    public static final String MENU_INICIO_GESTOR =
+    public static final String MENU_INICIO =
             "Menú Inicio Gestor" + "\n" +
                     Mensajes.SEPARATOR + "\n" +
                     "1. Listar" + "\n" +
@@ -13,7 +13,7 @@ public class MenuGestor {
                     "0. Cerrar Sesión" + "\n" +
                     Mensajes.SEPARATOR;
 
-    public static final String MENU_LISTAR_GESTOR =
+    public static final String MENU_LISTAR =
             "Menú Listar" + "\n" +
                     Mensajes.SEPARATOR + "\n" +
                     "1. Listar Productos" + "\n" +
@@ -22,13 +22,23 @@ public class MenuGestor {
                     "4. Listar Gestores" + "\n" +
                     "0. Volver" + "\n" +
                     Mensajes.SEPARATOR;
-    public static final String MENU_EDITAR_GESTOR =
+
+    public static final String MENU_EDITAR =
             "Menú Editar" + "\n" +
                     Mensajes.SEPARATOR + "\n" +
                     "1. Productos" + "\n" +
                     "2. Clientes" + "\n" +
                     "3. Vendedores" + "\n" +
                     "4. Gestores" + "\n" +
+                    "5. Facturas" + "\n" +
+                    "0. Volver" + "\n" +
+                    Mensajes.SEPARATOR;
+
+    public static final String MENU_INFORMES =
+            "Menú Editar" + "\n" +
+                    Mensajes.SEPARATOR + "\n" +
+                    "1. Generar Informe mensual" + "\n" +
+                    "2. Generar Informe anual" + "\n" +
                     "0. Volver" + "\n" +
                     Mensajes.SEPARATOR;
 
@@ -84,29 +94,30 @@ public class MenuGestor {
                     "0. Volver" + "\n" +
                     Mensajes.SEPARATOR;
 
+    public static final String MENU_EDITAR_FACTURAS =
+            "Menú Editar Facturas" + "\n" +
+                    Mensajes.SEPARATOR + "\n" +
+                    "1. Eliminar Factura" + "\n" +
+                    "0. Volver" + "\n" +
+                    Mensajes.SEPARATOR;
+
     public static int showMenuInicio() {
-        return showMenu(MENU_INICIO_GESTOR,Constantes.OPCIONES_MENU_INICIO_GESTOR);
+        return showMenu(MENU_INICIO, Constantes.OPCIONES_MENU_INICIO_GESTOR);
     }
 
-    public static int showMenuListar() {
-        return showMenu(MENU_LISTAR_GESTOR,Constantes.OPCIONES_MENU_LISTAR_GESTOR);
+    public static int showMenuListar() { return showMenu(MENU_LISTAR, Constantes.OPCIONES_MENU_LISTAR_GESTOR); }
 
-    }
+    public static int showMenuEditar() { return showMenu(MENU_EDITAR, Constantes.OPCIONES_MENU_EDITAR_GESTOR); }
 
-    public static int showMenuEditar() {
-        return showMenu(MENU_EDITAR_GESTOR,Constantes.OPCIONES_MENU_EDITAR_GESTOR);
-
-    }
-
-    public static int showMenuAñadirProducto(){
+    public static int showMenuAñadirProducto() {
         return showMenu(MENU_AÑADIR_PRODUCTO, Constantes.OPCIONES_MENU_AÑADIR_PRODUCTO_GESTOR);
     }
 
-    public static int showMenuUpdateProducto(){
+    public static int showMenuUpdateProducto() {
         return showMenu(MENU_UPDATE_PRODUCTO, Constantes.OPCIONES_MENU_UPDATE_PRODUCTO_GESTOR);
     }
 
-    public static int showMenuEditarProductos(){
+    public static int showMenuEditarProductos() {
         return showMenu(MENU_EDITAR_PRODUCTOS, Constantes.OPCIONES_MENU_CRUD_GESTOR);
     }
 
@@ -114,16 +125,23 @@ public class MenuGestor {
         return showMenu(MENU_EDITAR_CLIENTES, Constantes.OPCIONES_MENU_CRUD_GESTOR);
     }
 
-    public static int showMenuEditarVendedores(){
+    public static int showMenuEditarVendedores() {
         return showMenu(MENU_EDITAR_VENDEDORES, Constantes.OPCIONES_MENU_CRUD_GESTOR);
     }
 
-    public static int showMenuEditarGestores(){
+    public static int showMenuEditarGestores() {
         return showMenu(MENU_EDITAR_GESTORES, Constantes.OPCIONES_MENU_CRUD_GESTOR);
     }
 
+    public static int showMenuEditarFacturas() {
+        return showMenu(MENU_EDITAR_FACTURAS, Constantes.OPCIONES_MENU_CRUD_FACTURAS);
+    }
 
-    private static int showMenu(String menu, int [] opcionesMenu) {
+    public static int showMenuInformes() {
+        return showMenu(MENU_INFORMES, Constantes.OPCIONES_MENU_INFORMES);
+    }
+
+    private static int showMenu(String menu, int[] opcionesMenu) {
         int opcion = -1;
         do {
             System.out.println(menu);
@@ -135,7 +153,6 @@ public class MenuGestor {
         } while (!Validaciones.validarOpcion(opcion, opcionesMenu));
         return opcion;
     }
-
 
 
 }

@@ -8,6 +8,7 @@ import Vistas.Mensajes;
 import java.sql.*;
 
 public class ListadosFacturas {
+
     public static DatosConexion datosConexion = new DatosConexion();
 
     public static int getNextIdFactura() throws SQLException {
@@ -33,8 +34,8 @@ public class ListadosFacturas {
             statement.setInt(1, idProducto);
             result = statement.executeQuery();
             result.next();
-            if(result.getInt(1)>0){
-                existe =true;
+            if (result.getInt(1) > 0) {
+                existe = true;
             }
         }
         return existe;

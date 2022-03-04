@@ -1,48 +1,5 @@
-Hecho:
-Entidades, Menu login, ListaosFacturas
-
-Vista:
-
-Menu:
-
-Gestoras:
-gestoraCliente, Facturas, gestresBDD, Vendedores, Productos
-
-Listados:
-ListadosFacturas, ListadosProductos, ListadosUsuarios,
-
-Generador Informes:
-Constará de varios métodos que recibirán una fecha de inicio, tipo (anual o mensual)
-y una lista formada de objetos de la clase InformeRow
-
-generarInformeVentas(fecha, tipo ) --> Será generado por una clase informe, la cual podrá disponer de funciones sql para ello. no habrá tabla informe, solo se extraerá la info
-y se imprimiá en pantalla
-El informe constará del mes del qque se genera el informe, el total de ventas totales por cada tipo de producto (uds) y el total global
-
-
-
-El gestor de BDD constará de los siguientes metodos
-
-
-
-
-generarInformeVentasAnual (fecha)--> Igual que el anterior pero por año
-
-getProductosPlanta() --> Func que devuelve una tabla de productos planta
-getProductosJardnieria()--> Func tvf que devuelve una tabla de productos jardineria
-
-getClientes --> Mostrar lista de clientes
-
-getVendedores--> Mostrar lista de vendedores
-
-getGestores-->Mostrar lista de gestores
-
-getFacturasCliente(idCliente)--> Func que devuelve las facturas d dicho cliente
-
-
-
-
 Tenemos los siguientes usuarios:
+
 Gestores:
 user: root
 password: toor
@@ -57,7 +14,12 @@ telefono: 666778866
 dni: 68895536W
 telefono: 666229913
 
+Vendedores:
+user: vendedor
+password: abc
 
+user: vendedor2
+password: cba
 
 
 

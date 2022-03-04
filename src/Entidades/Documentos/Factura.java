@@ -33,8 +33,8 @@ public class Factura {
 
     }
 
-    public void setImporteTotal() {
-        calcularImporteTotal();
+    public void setImporteTotal(double importeTotal) {
+        this.importeTotal = importeTotal;
     }
 
     public int getIdFactura() {

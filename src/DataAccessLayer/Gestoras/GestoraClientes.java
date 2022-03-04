@@ -9,26 +9,13 @@ import java.sql.*;
 public class GestoraClientes {
 
     public static DatosConexion datosConexion = new DatosConexion();
+
     public static int insertarCliente(Cliente cliente) throws SQLException {
         int filasAfectadas = 0;
         String sql = "Insert Into Clientes Values (?, ?, ?, ?, ?, ?, ?)";
         try (Connection c = datosConexion.getConexion()) {
             PreparedStatement statement = c.prepareStatement(sql);
             statement = setStatementParameters(cliente, statement);
-            filasAfectadas = statement.executeUpdate();
-            Mensajes.showMsgFilasAfectadas(filasAfectadas);
-        }
-        return filasAfectadas;
-    }
-
-
-
-    public static int deleteCliente(int idCliente) throws SQLException {
-        int filasAfectadas = 0;
-        String sql = "DELETE FROM Clientes WHERE idCliente = ?";
-        try (Connection c = datosConexion.getConexion()) {
-            PreparedStatement statement = c.prepareStatement(sql);
-            statement.setInt(1, idCliente);
             filasAfectadas = statement.executeUpdate();
             Mensajes.showMsgFilasAfectadas(filasAfectadas);
         }
@@ -42,6 +29,18 @@ public class GestoraClientes {
             PreparedStatement statement = c.prepareStatement(sql);
             statement = setStatementParameters(cliente, statement);
             statement.setInt(8, cliente.getId());
+            filasAfectadas = statement.executeUpdate();
+            Mensajes.showMsgFilasAfectadas(filasAfectadas);
+        }
+        return filasAfectadas;
+    }
+
+    public static int deleteCliente(int idCliente) throws SQLException {
+        int filasAfectadas = 0;
+        String sql = "DELETE FROM Clientes WHERE idCliente = ?";
+        try (Connection c = datosConexion.getConexion()) {
+            PreparedStatement statement = c.prepareStatement(sql);
+            statement.setInt(1, idCliente);
             filasAfectadas = statement.executeUpdate();
             Mensajes.showMsgFilasAfectadas(filasAfectadas);
         }

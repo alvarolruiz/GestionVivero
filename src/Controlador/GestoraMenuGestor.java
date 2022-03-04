@@ -1,5 +1,7 @@
 package Controlador;
 
+import DataAccessLayer.Listados.ListadosInformes;
+import Entidades.Documentos.Informe;
 import Entidades.Productos.Producto;
 import Entidades.Productos.ProductoJardineria;
 import Entidades.Productos.ProductoPlanta;
@@ -7,12 +9,12 @@ import Entidades.Usuarios.Administradores.GestorBDD;
 import Entidades.Usuarios.Administradores.Vendedor;
 import Entidades.Usuarios.Cliente;
 import Entidades.Usuarios.Persona;
+import Vistas.GeneradorTablas;
 import Vistas.Mensajes;
 import Vistas.MenuGestor;
 
 import java.sql.SQLException;
-
-import static Vistas.MenuGestor.showMenuEditarProductos;
+import java.util.Date;
 
 public class GestoraMenuGestor {
     GestorBDD gestorLogueado;
@@ -21,7 +23,7 @@ public class GestoraMenuGestor {
         this.gestorLogueado = gestorLogueado;
     }
 
-    public void showMenuPrincipal() throws SQLException {
+    public void showMenuGestor() throws SQLException {
         int opcion = 0;
         boolean fin = false;
         do {
@@ -105,8 +107,32 @@ public class GestoraMenuGestor {
                 case 4:
                     showMenuEditarGestores();
                     break;
+                case 5:
+                    showMenuEditarFacturas();
+                    break;
             }
         } while (!fin);
+    }
+
+    private void showMenuEditarFacturas() throws SQLException {
+        int opcion = 0;
+        boolean fin = false;
+        do {
+            opcion = MenuGestor.showMenuEditarFacturas();
+            switch (opcion) {
+                case 0:
+                    fin = true;
+                    break;
+                case 1:
+                    eliminarFactura();
+                    break;
+            }
+        } while (!fin);
+    }
+
+    private void eliminarFactura() throws SQLException {
+        int idFactura = Mensajes.pedirNumero("Id de la facura que desea borrar: ");
+        gestorLogueado.deleteFactura(idFactura);
     }
 
 
@@ -180,7 +206,7 @@ public class GestoraMenuGestor {
     }
 
     private void updateProductoJardineria() throws SQLException {
-        ProductoJardineria productoJardineria = (ProductoJardineria) Mensajes.pedirDatosProducto();
+        ProductoJardineria productoJardineria = new ProductoJardineria(Mensajes.pedirDatosProducto());
         gestorLogueado.updateProductoJardineria(productoJardineria);
     }
 
@@ -318,15 +344,37 @@ public class GestoraMenuGestor {
         gestorLogueado.deleteGestorBDD(idGestor);
     }
 
-    private void showMenuInformes() {
-
+    private void showMenuInformes() throws SQLException {
+        int opcion = 0;
+        boolean fin = false;
+        do {
+            opcion = MenuGestor.showMenuInformes();
+            switch (opcion) {
+                case 0:
+                    fin = true;
+                    break;
+                case 1:
+                    generarInformeMensual();
+                    break;
+                case 2:
+                    generarInformeAnual();
+                    break;
+            }
+        } while (!fin);
     }
 
+    private void generarInformeMensual() throws SQLException {
+        Date fechaInicial = Mensajes.pedirFecha();
+        Informe informe = ListadosInformes.generarInformeMensual(fechaInicial);
+        System.out.println("Informe Mensual");
+        GeneradorTablas.imprimirInforme(informe);
+    }
 
-
-
-
-
-
+    private void generarInformeAnual() throws SQLException {
+        Date fechaInicial = Mensajes.pedirFecha();
+        Informe informe = ListadosInformes.generarInformeAnual(fechaInicial);
+        System.out.println("Informe Anual");
+        GeneradorTablas.imprimirInforme(informe);
+    }
 
 }

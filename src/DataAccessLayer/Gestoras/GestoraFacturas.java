@@ -11,9 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class GestoraFacturas {
-    /**
-     * Esta clase me permitirá añadir facturas y filas de factura
-     */
+
     public static DatosConexion datosConexion = new DatosConexion();
 
     public static int insertFactura(Factura factura) throws SQLException {
@@ -30,8 +28,6 @@ public class GestoraFacturas {
         }
         return filasAfectadas;
     }
-
-
 
     public static int deleteFactura (int idFactura) throws SQLException {
         int filasAfectadas = 0;

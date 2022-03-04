@@ -7,10 +7,9 @@ import Entidades.Usuarios.Cliente;
 import Entidades.Usuarios.Persona;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Scanner;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Mensajes {
     public static Scanner tecla = new Scanner(System.in);
@@ -205,6 +204,21 @@ public static final String MSG_AVISO_UPDATE = "Debe introducir un id que coincid
         }
         return new Cliente(id,nombre,dni,direccion,codPostal,ciudad,telefono,correo);
 
+    }
+
+    public static Date pedirFecha(){
+        String sFecha = "";
+        Date date = null;
+        do{
+            System.out.println("Introduce una fecha en formato dd/MM/yyyy");
+            sFecha = tecla.nextLine();
+            try {
+                date = new SimpleDateFormat("dd/MM/yyyy").parse(sFecha);
+            } catch (ParseException e) {
+                System.out.println("Porfavor, introduce la fecha en el formato correcto.");
+            }
+        }while(Validaciones.validarFecha(sFecha, date));
+        return date;
     }
 
     public static String pedirUsername(){

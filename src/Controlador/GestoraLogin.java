@@ -16,6 +16,7 @@ public class GestoraLogin {
     public static Administrador showMenuLogin() throws SQLException {
         Map<String, String> mapDatosLogin;
         Administrador administradorLogueado = null;
+
         mapDatosLogin = MenuLogin.showLogin();
         String usuario = mapDatosLogin.get("usuario");
         String contraseña = mapDatosLogin.get("contraseña");

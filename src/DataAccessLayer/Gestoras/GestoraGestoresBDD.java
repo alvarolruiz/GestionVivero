@@ -24,8 +24,6 @@ public class GestoraGestoresBDD {
         return filasAfectadas;
     }
 
-
-
     public static int deleteGestorBDD(int idGestor) throws SQLException {
         int filasAfectadas = 0;
         String sql = "DELETE FROM Gestores WHERE idGestor = ?";

@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class GestoraMenuVendedor {
-    //TODO Aplicar descuento de cliente y avisar al usuario del descuento generado
+
     private static Scanner tecla = new Scanner(System.in);
 
     private Vendedor vendedorLogeado;
@@ -45,38 +45,45 @@ public class GestoraMenuVendedor {
         System.out.println(Mensajes.MSG_INICIAR_VENTA);
         Cliente clienteComprador = Mensajes.preguntarDatosCliente();
         int idFactura = ListadosFacturas.getNextIdFactura();
-        Factura factura = new Factura(idFactura, clienteComprador.getId(),vendedorLogeado.getId());
-        // Clase factura tiene como fecha java.util.date
-        //java.sql.Timestamp fechaSql = new java.sql.Timestamp(new Date().getTime());
+        Factura factura = new Factura(idFactura, clienteComprador.getId(), vendedorLogeado.getId());
         boolean nuevaLinea = false;
         do {
             System.out.println(Mensajes.MSG_LINEA_FACTURA);
             factura.añadirFilaFactura(nuevaLineaFactura(idFactura));
             nuevaLinea = Mensajes.preguntarNuevaLineaFactura();
-        }while(nuevaLinea);
-        factura.setImporteTotal();
+        } while (nuevaLinea);
+        factura.calcularImporteTotal();
+        if (clienteComprador.getId() != 1) {
+            aplicarDescuento(factura, clienteComprador.getDescuentoCliente());
+        }
         vendedorLogeado.imprimirFactura(factura);
-        if(Mensajes.preguntarGuardarFactura()){
+        if (Mensajes.preguntarGuardarFactura()) {
             vendedorLogeado.guardarFactura(factura);
         }
     }
 
+    private void aplicarDescuento(Factura factura, double descuentoCliente) {
+        double descuento = factura.getImporteTotal() * descuentoCliente;
+        System.out.println(String.format("Ha ahorrado %f euros", descuento));
+        factura.setImporteTotal(factura.getImporteTotal() - descuento);
+    }
+
     private FilaFactura nuevaLineaFactura(int idFactura) throws SQLException {
         Producto producto = null;
+        int cantidadProducto = 0;
         FilaFactura fila = null;
         do {
             producto = ListadosProductos.getProducto(Mensajes.pedirNumero(Mensajes.MSG_COD_PROD));
-            if (producto != null) {
-                System.out.println(producto.getDescripcion());
-                int cantidadProducto = Mensajes.pedirNumero(Mensajes.MSG_CANTIDAD_PROD);
+            if (producto != null && producto.getUnidadesDisponibles() > 0) {
+                System.out.println(String.format(" %s, %d Unidades Disponibles.", producto.getDescripcion(), producto.getUnidadesDisponibles()));
+                cantidadProducto = Mensajes.pedirNumero(Mensajes.MSG_CANTIDAD_PROD);
                 fila = new FilaFactura(idFactura, producto, cantidadProducto);
             } else {
-                System.out.println("Producto no existe");
+                System.out.println("Producto no existe o no hay stock");
             }
-        }while (fila==null);
+        } while (fila == null);
         return fila;
     }
-
 
 
 }
